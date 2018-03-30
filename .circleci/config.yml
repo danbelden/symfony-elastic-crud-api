@@ -1,0 +1,69 @@
+version: 2
+
+defaults: &defaults
+  working_directory: /app
+
+jobs:
+
+  checkout:
+    <<: *defaults
+    docker:
+      - image: php:alpine
+    steps:
+      - attach_workspace:
+          at: /app
+      - checkout
+      - persist_to_workspace:
+          root: .
+          paths: '*'
+
+  composer:
+    <<: *defaults
+    docker:
+      - image: composer:latest
+    steps:
+      - attach_workspace:
+          at: /app
+      - run:
+          name: Composer
+          command: composer install --no-interaction
+      - persist_to_workspace:
+          root: .
+          paths: '*'
+
+  php-cs-fixer:
+    <<: *defaults
+    docker:
+      - image: php:alpine
+    steps:
+      - attach_workspace:
+          at: /app
+      - run:
+          name: Code check
+          command: vendor/bin/php-cs-fixer fix --using-cache=no --config=.php_cs.dist --verbose --diff --dry-run --stop-on-violation
+
+  phpunit:
+    <<: *defaults
+    docker:
+      - image: php:alpine
+    steps:
+      - attach_workspace:
+          at: /app
+      - run:
+          name: Unit tests
+          command: vendor/bin/phpunit
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - checkout
+      - composer:
+          requires:
+            - checkout
+      - php-cs-fixer:
+          requires:
+            - composer
+      - phpunit:
+          requires:
+            - composer

@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ".:/var/www/html"
+    environment:
+      - SYMFONY_ENV=dev
+  elastic:
+    image: danbelden/ubuntu-elasticsearch61
+    ports:
+      - "9200:9200"

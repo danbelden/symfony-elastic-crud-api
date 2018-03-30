@@ -1,0 +1,132 @@
+services:
+
+    elastic_client:
+        class: Elastica\Client
+        arguments:
+            -
+                host: '%elastic_host%'
+                port: '%elastic_port%'
+
+    elastic_repository:
+        class: AppBundle\Elastic\Repository
+        arguments:
+            - '@elastic_client'
+            - '%elastic_index%'
+            - '%elastic_type%'
+
+    index_list_command:
+        class: AppBundle\Command\IndexListCommand
+        arguments:
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    index_create_command:
+        class: AppBundle\Command\IndexCreateCommand
+        arguments:
+            - '%elastic_type%'
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    index_delete_command:
+        class: AppBundle\Command\IndexDeleteCommand
+        arguments:
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    type_list_command:
+        class: AppBundle\Command\TypeListCommand
+        arguments:
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    type_create_command:
+        class: AppBundle\Command\TypeCreateCommand
+        arguments:
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    type_info_command:
+        class: AppBundle\Command\TypeInfoCommand
+        arguments:
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    alias_add_command:
+        class: AppBundle\Command\AliasAddCommand
+        arguments:
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    alias_list_command:
+        class: AppBundle\Command\AliasListCommand
+        arguments:
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    alias_delete_command:
+        class: AppBundle\Command\AliasDeleteCommand
+        arguments:
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    alias_move_command:
+        class: AppBundle\Command\AliasMoveCommand
+        arguments:
+            - '@elastic_client'
+        tags:
+            - { name: 'console.command' }
+
+    read_one_param_converter:
+        class: AppBundle\ParamConverter\Read
+        tags:
+            - { name: request.param_converter, priority: 1, converter: read_one_param_converter }
+        arguments:
+            - '@elastic_repository'
+
+    read_many_param_converter:
+        class: AppBundle\ParamConverter\Criteria
+        tags:
+            - { name: request.param_converter, priority: 2, converter: read_many_param_converter }
+        arguments:
+            - '@form.factory'
+            - '@model_criteria_builder'
+
+    create_param_converter:
+        class: AppBundle\ParamConverter\Create
+        tags:
+            - { name: request.param_converter, priority: 3, converter: create_param_converter }
+        arguments:
+            - '@form.factory'
+            - '@model_handler'
+            - '@elastic_repository'
+
+    update_param_converter:
+        class: AppBundle\ParamConverter\Update
+        tags:
+            - { name: request.param_converter, priority: 4, converter: update_param_converter }
+        arguments:
+            - '@form.factory'
+            - '@model_handler'
+            - '@elastic_repository'
+
+    model_criteria_builder:
+        class: AppBundle\Criteria\ModelBuilder
+
+    model_handler:
+        class: AppBundle\Handler\Model
+        arguments:
+            - '@router'
+
+    models_handler:
+        class: AppBundle\Handler\Models
+        arguments:
+            - '@router'
