@@ -1,5 +1,7 @@
 # danbelden/symfony-elastic-crud-api
 
+[![CircleCI](https://circleci.com/gh/danbelden/symfony-elastic-crud-api.svg?style=svg)](https://circleci.com/gh/danbelden/symfony-elastic-crud-api)
+
 This is a symfony REST API for accessing JSON documents `models` store in Elastic Search.
 
 This project is has a dev environment enabled by docker for rapid-development.
