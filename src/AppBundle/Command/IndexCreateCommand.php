@@ -7,10 +7,14 @@ use Elastica\Client;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class IndexCreateCommand extends ContainerAwareCommand
 {
+    public const DEFAULT_NUM_SHARDS = 1;
+    public const DEFAULT_NUM_REPLICAS = 0;
+
     /**
      * @var string
      */
@@ -51,6 +55,20 @@ class IndexCreateCommand extends ContainerAwareCommand
                 InputArgument::OPTIONAL,
                 'The index name',
                 $defaultIndex
+            )
+            ->addOption(
+                'number-of-shards',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The number of primary index shards',
+                self::DEFAULT_NUM_SHARDS
+            )
+            ->addOption(
+                'number-of-replicas',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'The number of replicated shards',
+                self::DEFAULT_NUM_REPLICAS
             );
     }
 
@@ -72,8 +90,9 @@ class IndexCreateCommand extends ContainerAwareCommand
             return;
         }
 
-        $response = $index->create();
+        $options = $this->createIndexArgs($input, $output);
 
+        $response = $index->create($options);
         if ($response->isOk()) {
             $msg = sprintf('Index "%s" created sucessfully!', $indexName);
             $output->writeln($msg);
@@ -82,5 +101,24 @@ class IndexCreateCommand extends ContainerAwareCommand
         }
 
         $output->writeln('[Error]' . $response->getErrorMessage());
+    }
+
+    /**
+     * Helper function to form index create parameters
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return array
+     */
+    private function createIndexArgs(InputInterface $input, OutputInterface $output): array
+    {
+        return [
+            'settings' => [
+                'index' => [
+                    'number_of_shards' => (int) $input->getOption('number-of-shards'),
+                    'number_of_replicas' => (int) $input->getOption('number-of-replicas'),
+                ]
+            ]
+        ];
     }
 }

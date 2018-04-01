@@ -13,3 +13,5 @@ services:
     image: danbelden/ubuntu-elasticsearch61
     ports:
       - "9200:9200"
+    volumes:
+      - "./docker/elastic:/usr/share/elasticsearch-6.1.0/config"
