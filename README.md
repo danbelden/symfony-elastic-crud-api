@@ -138,14 +138,14 @@ This can come at a minor cost of performance to initialise the containers for ea
 
 This application comes with self-generating `swagger` api documentation built in.
 
+<img src="https://raw.githubusercontent.com/danbelden/symfony-elastic-crud-api/master/docs/img/swagger-api-doc-min.png" width="600" />
+
 This can be accessed once the dev environment is running on the url:
 - http://localhost/doc
 
 It is re-generated from controller annotations every time you refresh the `/doc` webpage.
 - https://github.com/danbelden/symfony-elastic-crud-api/blob/master/src/AppBundle/Controller/CreateController.php#L9
 - https://github.com/danbelden/symfony-elastic-crud-api/blob/master/src/AppBundle/Controller/CreateController.php#L15-L41
-
-<img src="https://raw.githubusercontent.com/danbelden/symfony-elastic-crud-api/master/docs/img/swagger-api-doc-min.png" width=400 />
 
 ## Summary
 
