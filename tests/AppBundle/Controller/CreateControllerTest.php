@@ -10,6 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class CreateControllerTest extends WebTestCase
 {
     /**
+     * @var Container
+     */
+    private $container;
+
+    /**
      * @var Client
      */
     private $client;
@@ -17,6 +22,8 @@ class CreateControllerTest extends WebTestCase
     public function setup()
     {
         $this->client = static::createClient();
+
+        $this->container = static::$kernel->getContainer();
 
         $mockElasticRepository = $this->getMockBuilder(ElasticRepository::class)
             ->disableOriginalConstructor()
@@ -27,14 +34,16 @@ class CreateControllerTest extends WebTestCase
             ->method('add')
             ->willReturn(true);
 
-        $container = static::$kernel->getContainer();
-        $container->set('elastic_repository', $mockElasticRepository);
+        $this->container->set('elastic_repository', $mockElasticRepository);
     }
 
     public function testCreateEndpointWithAValidRequestBody()
     {
+        $router = $this->container->get('router');
+        $url = $router->generate('create_model');
+
         $content = json_encode(['name' => 'test']);
-        $this->client->request('POST', '/models', [], [], [], $content);
+        $this->client->request('POST', $url, [], [], [], $content);
 
         $response = $this->client->getResponse();
 
@@ -67,8 +76,11 @@ class CreateControllerTest extends WebTestCase
 
     public function testCreateEndpointWithAnInvalidRequestBody()
     {
+        $router = $this->container->get('router');
+        $url = $router->generate('create_model');
+
         $content = json_encode(['name' => '']);
-        $this->client->request('POST', '/models', [], [], [], $content);
+        $this->client->request('POST', $url, [], [], [], $content);
 
         $response = $this->client->getResponse();
         $statusCode = $response->getStatusCode();
