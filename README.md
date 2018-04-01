@@ -132,6 +132,23 @@ OK (142 tests, 377 assertions)
 
 These tools are run using docker containers to avoid local environment issues.
 
-This can come at a cost of performance to initialise the containers for each tool execution.
+This can come at a minor cost of performance to initialise the containers for each tool execution.
+
+## Api docs
+
+This application comes with self-generating `swagger` api documentation built in.
+
+This can be accessed once the dev environment is running on the url:
+- http://localhost/doc
+
+It is re-generated from controller annotations every time you refresh the `/doc` webpage.
+- https://github.com/danbelden/symfony-elastic-crud-api/blob/master/src/AppBundle/Controller/CreateController.php#L9
+- https://github.com/danbelden/symfony-elastic-crud-api/blob/master/src/AppBundle/Controller/CreateController.php#L15-L41
+
+<img src="https://raw.githubusercontent.com/danbelden/symfony-elastic-crud-api/blob/master/docs/img/swagger-api-doc-min.png" width=400 />
+
+## Summary
+
+There are various useful features to this project, please feel free to fork and leverage it in your app.
 
 Enjoy.
