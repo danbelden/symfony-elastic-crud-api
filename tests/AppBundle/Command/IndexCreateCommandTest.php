@@ -118,4 +118,65 @@ class IndexCreateCommandTest extends KernelTestCase
         $output = $commandTester->getDisplay();
         $this->assertContains('Index "test" created sucessfully!', $output);
     }
+
+    public function testExecuteWithIndexArgumentAndShardOptions()
+    {
+        $kernel = static::createKernel();
+        $kernel->boot();
+
+        $container = $kernel->getContainer();
+
+        $mockResponse = $this->getMockBuilder(Response::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockResponse->expects($this->any())
+            ->method('isOK')
+            ->willReturn(true);
+
+        $mockIndex = $this->getMockBuilder(Index::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockIndex->expects($this->once())
+            ->method('exists')
+            ->willReturn(false);
+
+        $mockIndex->expects($this->once())
+            ->method('create')
+            ->with([
+                'settings' => [
+                    'index' => [
+                        'number_of_shards' => 5,
+                        'number_of_replicas' => 10
+                    ]
+                ]
+            ])
+            ->willReturn($mockResponse);
+
+        $mockClient = $this->getMockBuilder(Client::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockClient->expects($this->any())
+            ->method('getIndex')
+            ->with('test')
+            ->willReturn($mockIndex);
+
+        $container->set('elastic_client', $mockClient);
+
+        $application = new Application($kernel);
+        $command = $application->find('index:create');
+
+        $commandTester = new CommandTester($command);
+        $commandTester->execute([
+            'command' => $command->getName(),
+            'index' => 'test',
+            '--number-of-shards' => 5,
+            '--number-of-replicas' => 10,
+        ]);
+
+        $output = $commandTester->getDisplay();
+        $this->assertContains('Index "test" created sucessfully!', $output);
+    }
 }
