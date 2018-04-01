@@ -145,7 +145,7 @@ It is re-generated from controller annotations every time you refresh the `/doc`
 - https://github.com/danbelden/symfony-elastic-crud-api/blob/master/src/AppBundle/Controller/CreateController.php#L9
 - https://github.com/danbelden/symfony-elastic-crud-api/blob/master/src/AppBundle/Controller/CreateController.php#L15-L41
 
-<img src="https://raw.githubusercontent.com/danbelden/symfony-elastic-crud-api/blob/master/docs/img/swagger-api-doc-min.png" width=400 />
+<img src="https://raw.githubusercontent.com/danbelden/symfony-elastic-crud-api/master/docs/img/swagger-api-doc-min.png" width=400 />
 
 ## Summary
 
