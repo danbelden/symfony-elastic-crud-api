@@ -12,6 +12,11 @@ class DocControllerTest extends WebTestCase
     const TEMPLATE_PATH = __DIR__ . '/../../../src/AppBundle/Resources/views/doc.html.twig';
 
     /**
+     * @var Container
+     */
+    private $container;
+
+    /**
      * @var Client
      */
     private $client;
@@ -25,6 +30,8 @@ class DocControllerTest extends WebTestCase
     {
         $this->client = static::createClient();
 
+        $this->container = static::$kernel->getContainer();
+
         $templateDoc = new DOMDocument();
         $templateDoc->loadHTMLFile(self::TEMPLATE_PATH);
 
@@ -33,7 +40,10 @@ class DocControllerTest extends WebTestCase
 
     public function testDocEndpoint()
     {
-        $crawler = $this->client->request('GET', '/doc');
+        $router = $this->container->get('router');
+        $url = $router->generate('api_doc');
+
+        $crawler = $this->client->request('GET', $url);
 
         $response = $this->client->getResponse();
         $responseCode = $response->getStatusCode();
