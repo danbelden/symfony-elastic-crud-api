@@ -30,7 +30,7 @@ class QueryBuilderTest extends TestCase
         $this->assertArrayHasKey('from', $queryArray);
         $this->assertSame($queryArray['query']['match']['properties.name'], 'test');
         $this->assertSame($queryArray['size'], 20);
-        $this->assertSame($queryArray['from'], 11);
+        $this->assertSame($queryArray['from'], 10);
 
         $sort = $query->getParam('sort');
         $this->assertArrayHasKey('test', $sort);

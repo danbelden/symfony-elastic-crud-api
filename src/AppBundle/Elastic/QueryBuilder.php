@@ -25,7 +25,7 @@ class QueryBuilder
         $query->setSize($limit);
 
         $offset = $criteria->getOffsetOrDefault();
-        $query->setFrom($offset + 1);
+        $query->setFrom($offset);
 
         return $query;
     }
