@@ -90,7 +90,7 @@ class Repository
     /**
      * Method to add a given document to the document store
      *
-     * @param Document $model
+     * @param Document $document
      * @param bool $refresh
      * @return bool
      */
@@ -128,7 +128,7 @@ class Repository
     /**
      * Method to update a given document in the document store
      *
-     * @param Document $model
+     * @param Document $document
      * @param bool $refresh
      * @return bool
      */
