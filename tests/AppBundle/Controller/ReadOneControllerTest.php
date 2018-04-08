@@ -27,7 +27,7 @@ class ReadOneControllerTest extends WebTestCase
         $this->container = static::$kernel->getContainer();
     }
 
-    public function testReadOneEndpointWithAValidModelUuid()
+    public function testReadOneEndpointWithAValidUuid()
     {
         $uuidObj = Uuid::uuid4();
         $uuid = $uuidObj->toString();
@@ -71,7 +71,7 @@ class ReadOneControllerTest extends WebTestCase
         $this->assertContains('model', $selfLink->getRel());
     }
 
-    public function testReadOneEndpointWithAnInvalidModelUuid()
+    public function testReadOneEndpointWithAnInvalidUuid()
     {
         $elasticDoc = new MockElasticDocument();
         $mockParamConverter = new MockReadParamConverter($elasticDoc);

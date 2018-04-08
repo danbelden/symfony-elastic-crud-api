@@ -74,7 +74,7 @@ class DeleteControllerTest extends WebTestCase
         $this->container->set('elastic_repository', $mockElasticRepository);
     }
 
-    public function testDeleteEndpointWithAValidModelUuid()
+    public function testDeleteEndpointWithAValidUuid()
     {
         $uuid = Uuid::uuid4();
 
@@ -111,7 +111,7 @@ class DeleteControllerTest extends WebTestCase
         $this->assertContains($uuid->toString(), $selfLink->getHref());
     }
 
-    public function testDeleteEndpointWithAnInvalidModelUuid()
+    public function testDeleteEndpointWithAnInvalidUuid()
     {
         $router = $this->container->get('router');
         $url = $router->generate('delete_model', ['uuid' => 'test']);
