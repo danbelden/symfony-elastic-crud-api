@@ -1,17 +1,16 @@
 version: 2
 
 defaults: &defaults
-  working_directory: /app
+  working_directory: /tmp/workspace
 
 jobs:
 
   checkout:
     <<: *defaults
-    docker:
-      - image: php:alpine
+    machine: true
     steps:
       - attach_workspace:
-          at: /app
+          at: /tmp/workspace
       - checkout
       - persist_to_workspace:
           root: .
@@ -23,7 +22,7 @@ jobs:
       - image: composer:latest
     steps:
       - attach_workspace:
-          at: /app
+          at: /tmp/workspace
       - run:
           name: Composer
           command: composer install --no-interaction
@@ -37,7 +36,7 @@ jobs:
       - image: php:alpine
     steps:
       - attach_workspace:
-          at: /app
+          at: /tmp/workspace
       - run:
           name: Code check
           command: vendor/bin/php-cs-fixer fix --using-cache=no --config=.php_cs.dist --verbose --diff --dry-run --stop-on-violation
@@ -48,7 +47,7 @@ jobs:
       - image: php:alpine
     steps:
       - attach_workspace:
-          at: /app
+          at: /tmp/workspace
       - run:
           name: Unit tests
           command: vendor/bin/phpunit
