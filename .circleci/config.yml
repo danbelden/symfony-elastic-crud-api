@@ -33,7 +33,7 @@ jobs:
   php-cs-fixer:
     <<: *defaults
     docker:
-      - image: php:alpine
+      - image: php:7.4.13-alpine
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -44,7 +44,7 @@ jobs:
   phpunit:
     <<: *defaults
     docker:
-      - image: php:alpine
+      - image: php:7.4.13-alpine
     steps:
       - attach_workspace:
           at: /tmp/workspace
